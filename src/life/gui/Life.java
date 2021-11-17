@@ -3,15 +3,14 @@ package life.gui;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Life {
-
+	private GUI gui;
 	
-	private Window window;
+	public Life(GUI gui) {
+		this.gui = gui;
+	}
 
 	public void run() {
-		GUI gui = new GUI();
-
-
-		window = gui.createWindow(640, 480, "Hello World!");
+		Window window = gui.createWindow(640, 480, "Hello World!");
 
 		window.attachKeyCallback((key, scancode, action, mods) -> {
 			if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {

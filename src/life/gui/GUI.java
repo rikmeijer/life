@@ -11,6 +11,14 @@ import org.lwjgl.opengl.GL;
 
 public class GUI {
 
+	public interface LoopCondition {
+		boolean execute();	
+	}
+
+	public interface LoopActions {
+		void execute();
+	}
+
 	public GUI() {
 
 		System.err.println("Hello LWJGL " + Version.getVersion() + "!");
