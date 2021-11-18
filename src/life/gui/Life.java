@@ -1,30 +1,12 @@
 package life.gui;
 
-import static org.lwjgl.glfw.GLFW.*;
+import com.badlogic.gdx.ApplicationAdapter;
 
-public class Life {
-	private GUI gui;
-	
-	public Life(GUI gui) {
-		this.gui = gui;
+public class Life extends ApplicationAdapter {
+
+
+	@Override
+	public void create() {
+
 	}
-
-	public void run() {
-		Window window = gui.createWindow(640, 480, "Hello World!");
-
-		window.attachKeyCallback((key, scancode, action, mods) -> {
-			if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
-				window.close();
-			}
-		});
-		
-		window.center();
-
-		window.show(()->{
-			
-		});
-		
-		gui.terminate();
-	}
-
 }
