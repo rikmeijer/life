@@ -28,7 +28,6 @@ public class GUI {
 	}
 
 	public GUI() {
-
 		System.err.println("Hello LWJGL " + Version.getVersion() + "!");
 
 		// Setup an error callback. The default implementation
