@@ -4,7 +4,7 @@ import com.badlogic.gdx.backends.lwjgl3.*;
 
 import life.gui.Life;
 
-public class Main {
+public class DesktopLauncher {
 
 	public static void main(String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
