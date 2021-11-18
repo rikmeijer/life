@@ -10,21 +10,15 @@ import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
-import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.opengl.GL;
 
 public class GUI {
 
 	public interface LoopCondition {
 		boolean execute();	
-	}
-
-	public interface LoopActions {
-		void execute();
 	}
 
 	public GUI() {
@@ -60,23 +54,4 @@ public class GUI {
 		glfwTerminate();
 		glfwSetErrorCallback(null).free();
 	}
-
-	public void loop(LoopCondition condition, LoopActions actions) {
-		// This line is critical for LWJGL's interoperation with GLFW's
-		// OpenGL context, or any context that is managed externally.
-		// LWJGL detects the context that is current in the current thread,
-		// creates the GLCapabilities instance and makes the OpenGL
-		// bindings available for use.
-		GL.createCapabilities();
-
-		// Set the clear color
-		glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-
-		// Run the rendering loop until the user has attempted to close
-		// the window or has pressed the ESCAPE key.
-		while ( condition.execute() ) {
-			actions.execute();
-		}
-	}
-	
 }

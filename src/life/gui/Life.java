@@ -20,13 +20,9 @@ public class Life {
 		
 		window.center();
 
-		window.show();
-		
-		gui.loop(()->!window.closed(), ()->{
-			window.render();
+		window.show(()->{
+			
 		});
-		
-		window.destroy();
 		
 		gui.terminate();
 	}

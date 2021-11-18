@@ -17,10 +17,12 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 public class Window {
@@ -63,7 +65,11 @@ public class Window {
 		} // the stack frame is popped automatically
 	}
 
-	public void show() {
+
+	public interface LoopActions {
+		void execute();
+	}
+	public void show(LoopActions actions) {
 		// Make the OpenGL context current
 		glfwMakeContextCurrent(lwjglWindowHandle);
 		// Enable v-sync
@@ -71,25 +77,33 @@ public class Window {
 
 		// Make the lwjglWindowHandle visible
 		glfwShowWindow(lwjglWindowHandle);
-	}
+		
+		// This line is critical for LWJGL's interoperation with GLFW's
+		// OpenGL context, or any context that is managed externally.
+		// LWJGL detects the context that is current in the current thread,
+		// creates the GLCapabilities instance and makes the OpenGL
+		// bindings available for use.
+		GL.createCapabilities();
 
-	public void destroy() {
+		// Set the clear color
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+		// Run the rendering loop until the user has attempted to close
+		// the window or has pressed the ESCAPE key.
+		while ( !glfwWindowShouldClose(lwjglWindowHandle) ) {
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+
+			actions.execute();
+			
+			glfwSwapBuffers(lwjglWindowHandle); // swap the color buffers
+
+			// Poll for lwjglWindowHandle events. The key callback above will only be
+			// invoked during this call.
+			glfwPollEvents();
+		}
+		
 		// Free the lwjglWindowHandle callbacks and destroy the lwjglWindowHandle
 		glfwFreeCallbacks(lwjglWindowHandle);
 		glfwDestroyWindow(lwjglWindowHandle);
-	}
-
-	public boolean closed() {
-		return glfwWindowShouldClose(lwjglWindowHandle);
-	}
-
-	public void render() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-		glfwSwapBuffers(lwjglWindowHandle); // swap the color buffers
-
-		// Poll for lwjglWindowHandle events. The key callback above will only be
-		// invoked during this call.
-		glfwPollEvents();
 	}
 }
